@@ -8,7 +8,7 @@ function App() {
     const [clocks, setClacks] = useState([
         { name: "Grinvich", timezone: 0, id: uuidv4() },
     ]);
-    const [newClock, setNewClock] = useState({});
+    const [newClock, setNewClock] = useState({name: "Moskow", timezone: 3, id: uuidv4()});
     //console.log(zones)
 
     const handleChange = (e) => {
@@ -23,6 +23,8 @@ function App() {
         e.preventDefault();
         setClacks([...clocks, newClock]);
         document.getElementById("nameInput").value = "";
+        document.getElementById("timezoneInput").value = "UTC+0";
+        setNewClock({})
     };
 
     const handleDelete = (e) => {
@@ -37,10 +39,12 @@ function App() {
                     name="name"
                     type="select"
                     onChange={handleChange}
+                    defaultValue={'Moskow'}
                 ></input>
-                <select name="timezone" onChange={handleChange}>
+                <select id="timezoneInput" name="timezone" onChange={handleChange}>
                     {zones.map((zone) => (
-                        <option value={zone.value}>{zone.name}</option>
+                     zone.value === '+3' ? <option  value={zone.value} selected>{zone.name}</option>
+                     : <option  value={zone.value}>{zone.name}</option>
                     ))}
                 </select>
 
