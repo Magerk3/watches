@@ -2,7 +2,7 @@ import { Watches } from "./components/Watches";
 import "./App.css";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-const zones = require('./zones.json')
+const zones = require("./zones.json");
 
 function App() {
     const [clocks, setClacks] = useState([
@@ -10,7 +10,7 @@ function App() {
     ]);
     const [newClock, setNewClock] = useState({});
     //console.log(zones)
-   
+
     const handleChange = (e) => {
         setNewClock({
             ...newClock,
@@ -22,36 +22,40 @@ function App() {
     const handleSubmit = (e) => {
         e.preventDefault();
         setClacks([...clocks, newClock]);
-        document.getElementById('nameInput').value = '';
-        
+        document.getElementById("nameInput").value = "";
     };
 
     const handleDelete = (e) => {
-        setClacks(clocks.filter(clock => clock.id !== e.target.id))
-    }
-
-   
+        setClacks(clocks.filter((clock) => clock.id !== e.target.id));
+    };
 
     return (
         <div className="App">
             <form>
-                <input id='nameInput' name="name" type="select" onChange={handleChange} ></input>
-                <select name="timezone" onChange={handleChange} > 
-                    {zones.map(zone => <option value={zone.value}>{zone.name}</option>)}   
+                <input
+                    id="nameInput"
+                    name="name"
+                    type="select"
+                    onChange={handleChange}
+                ></input>
+                <select name="timezone" onChange={handleChange}>
+                    {zones.map((zone) => (
+                        <option value={zone.value}>{zone.name}</option>
+                    ))}
                 </select>
-                
-                    
-                
+
                 <button onClick={handleSubmit}>Добавить</button>
             </form>
-            {clocks.map((clock) => (
-                <Watches
-                    timezone={clock.timezone}
-                    id={clock.id}
-                    name={clock.name}
-                    handleDelete={handleDelete}
-                />
-            ))}
+            <div className="clocks">
+                {clocks.map((clock) => (
+                    <Watches
+                        timezone={clock.timezone}
+                        id={clock.id}
+                        name={clock.name}
+                        handleDelete={handleDelete}
+                    />
+                ))}
+            </div>
         </div>
     );
 }

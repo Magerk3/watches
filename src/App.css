@@ -1,5 +1,11 @@
 * {
     background-color: plum;
+    
+}
+.clocks {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 .clock {
     width: 300px;
@@ -7,14 +13,25 @@
     border-radius: 50%;
     background-color: #f3f3f3;
     position: relative;
-    margin: 50px auto;
+    
+    
+    
+}
+.name {
+    
 }
 
 .clock-container {
     text-align: center;
+    position: relative;
+    margin-left: 50px;
+    margin-bottom: 50px;
+
 }
-.name {
-   
+.delButton {
+    position: absolute;
+    left: calc(80%);
+    top: calc(15%)
 }
 
 .hour-hand,
