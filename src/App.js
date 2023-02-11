@@ -5,11 +5,34 @@ import { v4 as uuidv4 } from "uuid";
 const zones = require("./zones.json");
 
 function App() {
-    const [clocks, setClacks] = useState([
-        { name: "Grinvich", timezone: 0, id: uuidv4() },
+    const [clocks, setClоcks] = useState([
+        { name: "Greenwich", timezone: 0, id: uuidv4() },
     ]);
-    const [newClock, setNewClock] = useState({name: "Moskow", timezone: 3, id: uuidv4()});
-    //console.log(zones)
+    const [newClock, setNewClock] = useState({});
+    const [hours, setHours] = useState();
+    const [minutes, setMinutes] = useState();
+    const [seconds, setSeconds] = useState();
+
+    useEffect(() => {
+        if (clocks !== []) {
+            const intervalId = setInterval(() => {
+                const now = new Date();
+                const offset = new Date().getTimezoneOffset();
+                setHours(now.getHours() + offset / 60);
+                setMinutes(now.getMinutes());
+                setSeconds(now.getSeconds());
+                if (clocks.length === 0) clearInterval(intervalId);
+            }, 1000);
+            return () => clearInterval(intervalId);
+        }
+    }, [clocks]);
+
+    const getHourDegrees = (timezone) =>
+        ((hours + Number(timezone)) / 12) * 360 + (minutes / 60) * 30;
+
+    const getMinuteDegrees = () => (minutes / 60) * 360 + (seconds / 60) * 6;
+
+    const getSecondDegrees = () => (seconds / 60) * 360;
 
     const handleChange = (e) => {
         setNewClock({
@@ -21,14 +44,14 @@ function App() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setClacks([...clocks, newClock]);
+        setClоcks([...clocks, newClock]);
         document.getElementById("nameInput").value = "";
-        document.getElementById("timezoneInput").value = "UTC+0";
-        setNewClock({})
+        document.getElementById("timezoneInput").value = "UTC+";
+        setNewClock({});
     };
 
     const handleDelete = (e) => {
-        setClacks(clocks.filter((clock) => clock.id !== e.target.id));
+        setClоcks(clocks.filter((clock) => clock.id !== e.target.id));
     };
 
     return (
@@ -39,12 +62,17 @@ function App() {
                     name="name"
                     type="select"
                     onChange={handleChange}
-                    defaultValue={'Moskow'}
+                    
+                    
                 ></input>
-                <select id="timezoneInput" name="timezone" onChange={handleChange}>
+                <select
+                    id="timezoneInput"
+                    name="timezone"
+                    onChange={handleChange}
+                    
+                >
                     {zones.map((zone) => (
-                     zone.value === '+3' ? <option  value={zone.value} selected>{zone.name}</option>
-                     : <option  value={zone.value}>{zone.name}</option>
+                        <option value={zone.value}>{zone.name}</option>
                     ))}
                 </select>
 
@@ -53,10 +81,12 @@ function App() {
             <div className="clocks">
                 {clocks.map((clock) => (
                     <Watches
-                        timezone={clock.timezone}
                         id={clock.id}
                         name={clock.name}
                         handleDelete={handleDelete}
+                        hourDegrees={getHourDegrees(clock.timezone)}
+                        minuteDegrees={getMinuteDegrees()}
+                        secondDegrees={getSecondDegrees()}
                     />
                 ))}
             </div>
