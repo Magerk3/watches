@@ -21,12 +21,15 @@ function App() {
                 setHours(now.getHours() + offset / 60);
                 setMinutes(now.getMinutes());
                 setSeconds(now.getSeconds());
-                setNewClock({name: `clock ${clocks.length + 1}`, timezone: 0, id: ''})
                 if (clocks.length === 0) clearInterval(intervalId);
             }, 1000);
             return () => clearInterval(intervalId);
         }
     }, [clocks]);
+    
+    useEffect(() => {
+        setNewClock({name: `clock ${clocks.length + 1}`, timezone: 0, id: ''})
+    },[clocks])
 
     const getHourDegrees = (timezone) =>
         ((hours + Number(timezone)) / 12) * 360 + (minutes / 60) * 30;
