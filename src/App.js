@@ -21,6 +21,7 @@ function App() {
                 setHours(now.getHours() + offset / 60);
                 setMinutes(now.getMinutes());
                 setSeconds(now.getSeconds());
+                setNewClock({name: `clock ${clocks.length + 1}`, timezone: 0, id: ''})
                 if (clocks.length === 0) clearInterval(intervalId);
             }, 1000);
             return () => clearInterval(intervalId);
@@ -62,15 +63,16 @@ function App() {
                     name="name"
                     type="select"
                     onChange={handleChange}
-                    
+                    value={newClock.name}
                     
                 ></input>
                 <select
                     id="timezoneInput"
                     name="timezone"
                     onChange={handleChange}
-                    
-                >
+                    value={newClock.timezone}
+                >   
+                    <option value="">Select time zone</option>
                     {zones.map((zone) => (
                         <option value={zone.value}>{zone.name}</option>
                     ))}
