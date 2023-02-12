@@ -8,7 +8,11 @@ function App() {
     const [clocks, setClоcks] = useState([
         { name: "Greenwich", timezone: 0, id: uuidv4() },
     ]);
-    const [newClock, setNewClock] = useState({});
+    const [newClock, setNewClock] = useState({
+        name: `clock ${clocks.length}`,
+        timezone: Math.floor(Math.random() * 27) - 12,
+        id: uuidv4(),
+    });
     const [hours, setHours] = useState();
     const [minutes, setMinutes] = useState();
     const [seconds, setSeconds] = useState();
@@ -26,10 +30,14 @@ function App() {
             return () => clearInterval(intervalId);
         }
     }, [clocks]);
-    
+
     useEffect(() => {
-        setNewClock({name: `clock ${clocks.length + 1}`, timezone: 0, id: ''})
-    },[clocks])
+        setNewClock({
+            name: `clock ${clocks.length + 1}`,
+            timezone: Math.floor(Math.random() * 27) - 12,
+            id: uuidv4(),
+        });
+    }, [clocks])
 
     const getHourDegrees = (timezone) =>
         ((hours + Number(timezone)) / 12) * 360 + (minutes / 60) * 30;
@@ -37,6 +45,14 @@ function App() {
     const getMinuteDegrees = () => (minutes / 60) * 360 + (seconds / 60) * 6;
 
     const getSecondDegrees = () => (seconds / 60) * 360;
+
+    const getHours = (timezone) => {
+        let newHours = Number(hours) + Number(timezone);
+        if (newHours === 0) return 0;
+        else if (newHours < 0) return newHours + 24;
+        else if (newHours >= 24) return newHours - 24;
+        else return newHours;
+    };
 
     const handleChange = (e) => {
         setNewClock({
@@ -48,11 +64,9 @@ function App() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setClоcks([...clocks, newClock]);
-        document.getElementById("nameInput").value = "";
-        document.getElementById("timezoneInput").value = "UTC+";
-        setNewClock({});
-    };
+        setClоcks([...clocks, newClock]
+        );
+     };
 
     const handleDelete = (e) => {
         setClоcks(clocks.filter((clock) => clock.id !== e.target.id));
@@ -67,21 +81,21 @@ function App() {
                     type="select"
                     onChange={handleChange}
                     value={newClock.name}
-                    
                 ></input>
                 <select
                     id="timezoneInput"
                     name="timezone"
                     onChange={handleChange}
                     value={newClock.timezone}
-                >   
-                    <option value="">Select time zone</option>
+                >
                     {zones.map((zone) => (
                         <option value={zone.value}>{zone.name}</option>
                     ))}
                 </select>
 
-                <button onClick={handleSubmit}>Добавить</button>
+                <button id="submit" onClick={handleSubmit}>
+                    Добавить
+                </button>
             </form>
             <div className="clocks">
                 {clocks.map((clock) => (
@@ -92,6 +106,9 @@ function App() {
                         hourDegrees={getHourDegrees(clock.timezone)}
                         minuteDegrees={getMinuteDegrees()}
                         secondDegrees={getSecondDegrees()}
+                        hours={getHours(clock.timezone)}
+                        minutes={minutes}
+                        seconds={seconds}
                     />
                 ))}
             </div>

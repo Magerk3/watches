@@ -17,8 +17,16 @@
     
     
 }
-.name {
-    
+#nameInput {
+    height: 30px;
+}
+
+#timezoneInput  {
+    height: 37px;
+}
+
+#submit {
+    height: 35px;
 }
 
 .clock-container {
@@ -31,8 +39,10 @@
 .delButton {
     position: absolute;
     left: calc(80%);
-    top: calc(15%)
+    top: calc(15%);
+    
 }
+
 
 .hour-hand,
 .minute-hand,

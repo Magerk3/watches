@@ -1,5 +1,3 @@
-
-
 export const Watches = ({
     id,
     name,
@@ -7,6 +5,9 @@ export const Watches = ({
     hourDegrees,
     minuteDegrees,
     secondDegrees,
+    hours,
+    minutes,
+    seconds,
 }) => {
     return (
         <div className="clock-container">
@@ -14,6 +15,11 @@ export const Watches = ({
                 X
             </button>
             <h1 className="name">{name}</h1>
+            <h2>
+                {hours < 10 ? "0" + hours : hours}:
+                {minutes < 10 ? "0" + minutes : minutes}:
+                {seconds < 10 ? "0" + seconds : seconds}
+            </h2>
             <div className="clock" id={id + "clock"}>
                 <div
                     className="hour-hand"
